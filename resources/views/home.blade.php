@@ -1,13 +1,32 @@
 <x-layout>
+    <x-slot:title>
+        Booking Page
+    </x-slot>
 
-    <x-header>
-    </x-header>
+    <x-slot:header>
+        <x-header>
+        </x-header>
+    </x-slot:header>
+
+    {{-- Alert message for not loggint here --}}
+    @if (session('status'))
+        <div class="alert alert-success">
+            {{ session('status') }}
+        </div>
+    @endif
+
+    {{-- <div class="alert alert-success">
+        world is best for living beings
+    </div> --}}
+
+
     {{-- Div for padding so that everything don't flow out --}}
     <div class="p-1 flex flex-col flex-wrap gap-1 justify-center items-center">
         <h1 class="text-3xl font-bold  text-[#5e66f5] mt-2.5">
             ASIAKKAANKATU 6*
         </h1>
-        <p class="mt-2"><span class="text-red-500 font-bold">*</span> This website is created for the proper bookings
+        <p class="mt-2"><span class="text-red-500 font-bold">*</span> This website is created for the proper
+            bookings
             system for
             the clubrooms in this
             building so it is open for everyone</p>
