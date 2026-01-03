@@ -10,7 +10,7 @@
 
     {{-- Alert message for not loggint here --}}
     @if (session('status'))
-        <div class="alert alert-success">
+        <div class="text-center text-green-600">
             {{ session('status') }}
         </div>
     @endif
