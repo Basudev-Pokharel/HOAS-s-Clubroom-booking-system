@@ -50,5 +50,7 @@
                 account, Make one</a>
         </div>
     </div>
+    <h1>Is logged in:{{ Auth::check() ? 'true' : 'false' }}</h1>
+
 
 </x-layout>

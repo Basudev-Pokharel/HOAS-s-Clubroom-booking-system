@@ -19,7 +19,8 @@
         <div>
             <h4 class="w-full bg-gray-100  text-center font-semibold text-gray-600 p-1">CLUB ROOM
             </h4>
-            <h4 class="w-full bg-gray-200  text-center font-semibold text-gray-600 p-1">RESERVATIONS USED THIS MONTH: 8
+            <h4 class="w-full bg-gray-200  text-center font-semibold text-gray-600 p-1">RESERVATIONS USED THIS MONTH:
+                {{ Auth::user()->Total_Booked }}
                 out
                 of 10
             </h4>
@@ -27,4 +28,6 @@
             </h4>
         </div>
     </div>
+
+    <h1>Is logged in:{{ Auth::check() ? 'true' : 'false' }}</h1>
 </div>
