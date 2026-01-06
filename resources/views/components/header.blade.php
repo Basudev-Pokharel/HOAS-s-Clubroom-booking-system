@@ -3,7 +3,7 @@
     <img src="/images/logo.png" alt="cannot load" class="w-[200px] cursor-pointer"
         onclick="location.href='{{ route('dashboard') }}'">
     @auth
-        <div class="border-2 border-amber-300 cursor-pointer">
+        <div class=" cursor-pointer">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6"
                 class="text-[#5e66f5]" onclick="ModalOpen()" id='userIcon'>
                 <path fill-rule="evenodd"

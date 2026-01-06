@@ -16,3 +16,18 @@ This is the booking system for the people of Aisakkaankatu building. In HOAS's b
 - CSS (Tailwind CSS)
 - JS (Javascript)
 
+
+## Testing Query for Joining table as of development Phase
+```sql
+SELECT 
+    b.id,
+    b.booking_date,
+    u.name AS user_name,
+    ts.start_time,
+    cr.name AS CLub_room
+FROM bookings b
+JOIN users u ON b.user_id = u.id
+JOIN time_slots ts ON b.time_slot_id = ts.id
+JOIN club_rooms cr ON b.club_room_id = cr.id;
+
+```

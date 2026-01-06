@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\TimeSlotController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\isAuthenticated;
@@ -15,3 +17,5 @@ Route::get('/', function () {
     return view('home');
 })->name('dashboard')->middleware(isAuthenticated::class);
 Route::patch('/update-password', [UserController::class, 'changePassword'])->name('user.update');
+Route::post('/book/{id}', [BookingController::class, 'book'])->name('slot.book');
+Route::post('/cancel/{id}', [BookingController::class, 'cancel'])->name('slot.cancel');
