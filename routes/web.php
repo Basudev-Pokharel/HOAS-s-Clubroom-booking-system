@@ -19,3 +19,12 @@ Route::get('/', function () {
 Route::patch('/update-password', [UserController::class, 'changePassword'])->name('user.update');
 Route::post('/book/{id}', [BookingController::class, 'book'])->name('slot.book');
 Route::post('/cancel/{id}', [BookingController::class, 'cancel'])->name('slot.cancel');
+
+// Routes for admins
+Route::view('/login_admin', 'admin.login')->name('admin.login.page')->middleware(isGuest::class);
+Route::post('/admin-login', [UserController::class, 'adminLogin'])->name('admin.login');
+Route::get('/admin', [BookingController::class, 'viewBookingsAdmin'])->name('admin.user.dashboard')->middleware(isAuthenticated::class);
+Route::post('/cancel-admin', [BookingController::class, 'cancelByAdmin'])->name('admin.slot.cancel');
+Route::post('/make-admin', [UserController::class, 'promoteToAdmin'])->name('admin.promote.member');
+Route::post('/remove-admin', [UserController::class, 'removeToNonAdmin'])->name('admin.remove.member');
+Route::post('/delete-people-admin', [UserController::class, 'deleteUser'])->name('admin.delete.member');

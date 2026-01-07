@@ -14,23 +14,56 @@
         .date-only-icon::-webkit-calendar-picker-indicator {
             cursor: pointer;
         }
+
+        /* //FOr datepicker */
+        input[type="date"] {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        /* Container with relative positioning */
+        .datepicker-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        /* For mobile viewport */
+        @media (max-width: 640px) {
+            .datepicker-container {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
     {{-- <!-- Smile, breathe, and go slowly. - Thich Nhat Hanh --> --}}
-    <h4 class="text-xl font-bold  text-[#5e66f5] mt-2.5">
-        MAKING A RESERVATION FOR CLUB ROOM
+    <h4 class="text-xl font-bold  text-[#0b62db] mt-2.5 text-center">
+        BOOKING A CLUB ROOM
     </h4>
-    <ul class="list-['-'] text-xs w-full px-5 text-wrap">
-        <li>Turns are reserved first come first served basis. </li>
-        <li>The next month is reservable starting at 00.00 on the first day of the previous month.</li>
-        <li>Reservation can be cancelled without any time limit, but cancellations made less than 12 hours before the
-            reserved time will be counted to the total amount of reservations</li>
-    </ul>
     <div class="mt-3 flex gap-4 flex-wrap justify-center w-full">
-        <h4 class=" w-full bg-gray-50 border-b border-gray-300 text-center font-semibold text-[#5e66f5] p-1">CLUBROOM,
-            STAIRCASE C</h4>
+        <div
+            class="flex gap-2 items-center justify-center w-full bg-gray-50 border-b border-gray-300 text-center font-semibold text-[#0b62db] p-1">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+            </svg>
+            <h4>
 
-        <h4
-            class="w-full bg-gray-50 border-b border-gray-300 text-center font-semibold text-[#5e66f5] p-1 border flex items-center justify-center">
+                CLUBROOM,
+                STAIRCASE C
+            </h4>
+        </div>
+
+        <div
+            class="w-full bg-gray-50 border-b border-gray-300 text-center font-semibold text-[#0b62db] p-1 border flex items-center justify-center gap-2">
             @php
                 date_default_timezone_set('EET');
                 $date_today = date_create('now');
@@ -47,15 +80,28 @@
                 $selectedDate = $printable_datee_url ?? $printable_date_today;
                 $selectedDay = $datee_url->format('l');
             @endphp
-            <label for="date"
-                id='date_label'>{{ $selectedDay . ' ' }}{{ date_format(date_create($selectedDate), 'd.m.Y') }}</label>
-            <input type="date" name="date" id="date" min="{{ $printable_date_today }}"
-                max="{{ $printable_date_after_2_month }}" value="{{ $selectedDate }}" class='date-only-icon'
-                onchange="window.location='?date=' + this.value">
-        </h4>
+            <div class="flex items-center justify-center relative overflow-visible ">
+                {{-- <div class="datepicker-wrapper"> --}}
+                <label for="date" id='date_label' class="text-[#0b62db] flex gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z" />
+                    </svg>
+                    {{ $selectedDay . ' ' }}{{ date_format(date_create($selectedDate), 'd.m.Y') }}</label>
+
+                <input type="date" name="date" id="date" min="{{ $printable_date_today }}"
+                    max="{{ $printable_date_after_2_month }}" value="{{ $selectedDate }}"
+                    class='date-only-icon relative z-50 mr-8' onchange="window.location='?date=' + this.value">
+
+            </div>
+        </div>
+        {{-- Datepicker --}}
+        {{-- Datepicker ends here --}}
+
+
+
         <div>
-            <h4 class="w-full bg-gray-100  text-center font-semibold text-gray-600 p-1">CLUB ROOM
-            </h4>
             @php
                 $slots_booked = \App\Models\Booking::where('user_id', auth()->id())
                     ->whereMonth('booking_date', date_create($selectedDate)->format('m'))
@@ -80,17 +126,19 @@
                 }
 
             @endphp
-            <h4 class="w-full bg-gray-200  text-center font-semibold text-gray-600 p-1">RESERVATIONS USED THIS MONTH:
+            <h4 class="w-full text-[#0b62db] bg-[#0b62db1e]  text-center font-semibold p-1">RESERVATIONS USED THIS
+                MONTH:
                 {{ $slots_booked }}
                 out
                 of 10
             </h4>
-            <div class="w-full bg-gray-100  text-center text-gray-600 border-2 flex justify-center items-center">
+            <div
+                class="w-full bg-gray-100  text-center text-gray-600 border-2 border-[#0b62db] flex justify-center items-center">
                 <table class="w-full overflow-x-auto">
                     <tbody>
 
                         @foreach ($relevant_slots as $slot)
-                            <tr class=" flex gap-2 {{ $slot->id % 2 == 0 ? 'bg-gray-200' : '' }}">
+                            <tr class=" flex gap-2 {{ $loop->index % 2 == 0 ? 'text-[#2b65b6] bg-[#0b62db1e]' : '' }}">
                                 <td class="border-r-3 p-1 min-w-[100px]">
                                     {{ date_create($slot->start_time)->format('H:00') }}</td>
                                 <th class=" p-1 min-w-[100px]">
@@ -127,8 +175,6 @@
             </div>
         </div>
     </div>
-
-    <h1>Is logged in:{{ Auth::check() ? 'true' : 'false' }}</h1>
     <script>
         let d = new Date({{ Illuminate\Support\Js::from($selectedDate) }});
         var FullDateCurrentCalander = d.getFullYear() + '-' + d.getMonth() + 1 + '-' + d.getDate();
