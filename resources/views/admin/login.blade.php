@@ -6,7 +6,7 @@
         <x-header>
         </x-header>
     </x-slot:header>
-    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-center justify-center">
+    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-left justify-center sm:items-center">
         <h3 class="bg-[#254067] p-1 text-white font-semibold w-full text-lg">LOG IN ADMINISTRATOR</h3>
 
         @if (session('status'))
@@ -38,6 +38,8 @@
             <input type="submit" value="LOGIN"
                 class="p-2 px-3 text-[#5e66f5] bg-gray-200 w-fit font-semibold cursor-pointer">
         </form>
+        <a class="cursor-pointer p-2 bg-[#254067] text-white rounded-sm w-fit text-left sm:text-center mt-2"
+            href="{{ route('user.login') }}">Member
+            Login</a>
     </div>
-    <a class="cursor-pointer p-2 bg-[#254067] text-white rounded-sm" href="{{ route('user.login') }}">Member Login</a>
 </x-layout>

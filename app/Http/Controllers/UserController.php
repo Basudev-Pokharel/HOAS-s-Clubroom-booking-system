@@ -19,7 +19,7 @@ class UserController extends Controller
         $user['password'] = $request['password'];
 
         if (Auth::attempt($user)) {
-            return redirect()->route('dashboard')->with('status', 'Login SUccessfully');
+            return redirect()->route('dashboard')->with('status', 'Login Successfully🎉👋');
         } else {
             return redirect()->back()->with('status', 'Credentials doesn"t match');
         }

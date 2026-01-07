@@ -27,18 +27,44 @@
             z-index: 10;
         }
 
-        /* Container with relative positioning */
+        .date-only-icon {
+            color: transparent;
+            background-color: transparent;
+            cursor: pointer;
+            position: relative;
+            z-index: 50;
+        }
+
+        .date-only-icon::-webkit-datetime-edit {
+            display: none;
+        }
+
+        .date-only-icon::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+        }
+
         .datepicker-container {
             position: relative;
             display: inline-flex;
             align-items: center;
         }
 
-        /* For mobile viewport */
         @media (max-width: 640px) {
             .datepicker-container {
                 width: 100%;
                 justify-content: center;
+            }
+
+            .date-only-icon::-webkit-calendar-picker-indicator {
+                position: fixed;
+                left: 50%;
+                transform: translateX(-50%);
             }
         }
     </style>
@@ -80,7 +106,7 @@
                 $selectedDate = $printable_datee_url ?? $printable_date_today;
                 $selectedDay = $datee_url->format('l');
             @endphp
-            <div class="flex items-center justify-center relative overflow-visible ">
+            <div class="flex items-center justify-center relative overflow-visible datepicker-container">
                 {{-- <div class="datepicker-wrapper"> --}}
                 <label for="date" id='date_label' class="text-[#0b62db] flex gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
@@ -96,11 +122,6 @@
 
             </div>
         </div>
-        {{-- Datepicker --}}
-        {{-- Datepicker ends here --}}
-
-
-
         <div>
             @php
                 $slots_booked = \App\Models\Booking::where('user_id', auth()->id())
@@ -134,44 +155,50 @@
             </h4>
             <div
                 class="w-full bg-gray-100  text-center text-gray-600 border-2 border-[#0b62db] flex justify-center items-center">
-                <table class="w-full overflow-x-auto">
-                    <tbody>
-
-                        @foreach ($relevant_slots as $slot)
-                            <tr class=" flex gap-2 {{ $loop->index % 2 == 0 ? 'text-[#2b65b6] bg-[#0b62db1e]' : '' }}">
-                                <td class="border-r-3 p-1 min-w-[100px]">
-                                    {{ date_create($slot->start_time)->format('H:00') }}</td>
-                                <th class=" p-1 min-w-[100px]">
-                                    @if (empty($slot->bookings) || count($slot->bookings) == 0)
-                                        <form action="{{ route('slot.book', $slot->id) }}" class="bookingTimeForm"
-                                            data-slot-id="{{ $slot->id }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name='booking_date' value="{{ $selectedDate }}">
-                                            <div>
-                                                <input type="submit" value="Vacant" class="cursor-pointer" />
-                                            </div>
-                                        </form>
-                                    @endif
-                                    @if (!empty($slot->bookings) && count($slot->bookings) > 0)
-                                        <form action="{{ route('slot.cancel', $slot->id) }}" class="bookingTimeForm"
-                                            data-slot-id="{{ $slot->id }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name='booking_date' value="{{ $slot->start_time }}">
-                                            <div>
-                                                <input type="submit" value="Booked"
-                                                    class="cursor-pointer text-green-600 " disabled />
-                                                @if ($slot->bookings[0]->user_id == auth()->id())
-                                                    <input type="submit" value="Cancel"
-                                                        class="cursor-pointer text-red-500" />
-                                                @endif
-                                            </div>
-                                        </form>
-                                    @endif
-                                </th>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @if (count($relevant_slots) > 0)
+                    <table class="w-full overflow-x-auto">
+                        <tbody>
+                            @foreach ($relevant_slots as $slot)
+                                <tr
+                                    class=" flex gap-2 {{ $loop->index % 2 == 0 ? 'text-[#2b65b6] bg-[#0b62db1e]' : '' }}">
+                                    <td class="border-r-3 p-1 min-w-[100px]">
+                                        {{ date_create($slot->start_time)->format('H:00') }}</td>
+                                    <th class=" p-1 min-w-[100px]">
+                                        @if (empty($slot->bookings) || count($slot->bookings) == 0)
+                                            <form action="{{ route('slot.book', $slot->id) }}" class="bookingTimeForm"
+                                                data-slot-id="{{ $slot->id }}" method="POST">
+                                                @csrf
+                                                <input type="hidden" name='booking_date' value="{{ $selectedDate }}">
+                                                <div>
+                                                    <input type="submit" value="Vacant" class="cursor-pointer" />
+                                                </div>
+                                            </form>
+                                        @endif
+                                        @if (!empty($slot->bookings) && count($slot->bookings) > 0)
+                                            <form action="{{ route('slot.cancel', $slot->id) }}"
+                                                class="bookingTimeForm" data-slot-id="{{ $slot->id }}"
+                                                method="POST">
+                                                @csrf
+                                                <input type="hidden" name='booking_date'
+                                                    value="{{ $slot->start_time }}">
+                                                <div>
+                                                    <input type="submit" value="Booked"
+                                                        class="cursor-pointer text-green-600 " disabled />
+                                                    @if ($slot->bookings[0]->user_id == auth()->id())
+                                                        <input type="submit" value="Cancel"
+                                                            class="cursor-pointer text-red-500" />
+                                                    @endif
+                                                </div>
+                                            </form>
+                                        @endif
+                                    </th>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    <h2 class="font-bold">No Booking After This Time for Today</h2>
+                @endif
             </div>
         </div>
     </div>

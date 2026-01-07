@@ -6,7 +6,7 @@
         <x-header>
         </x-header>
     </x-slot:header>
-    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-center justify-center">
+    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-left justify-center sm:items-center">
         <h3 class="bg-[#254067] p-1 text-white font-semibold w-full text-lg">LOG IN</h3>
 
         @if (session('status'))
@@ -51,10 +51,9 @@
                 have
                 account, Make one</a>
         </div>
+        <a class="cursor-pointer p-2 bg-[#254067] text-white rounded-sm w-fit text-left sm:text-center mt-2"
+            href="{{ route('admin.login.page') }}">Manager
+            Login</a>
     </div>
-    <a class="cursor-pointer p-2 bg-[#0b62db] text-white rounded-sm"
-        href="{{ route('admin.login.page') }}">ADMINISTRATOR
-        Login</a>
-
 
 </x-layout>

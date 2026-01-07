@@ -23,6 +23,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => bcrypt('password123'),
                 'isAdmin' => 1,
+                'hasKey' => 1,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -35,7 +36,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => bcrypt('password123'),
                 'isAdmin' => 0,
-
+                'hasKey' => 0,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -48,7 +49,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => bcrypt('password123'),
                 'isAdmin' => 0,
-
+                'hasKey' => 0,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -61,7 +62,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => null,
                 'password' => bcrypt('password123'),
                 'isAdmin' => 0,
-
+                'hasKey' => 0,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -74,7 +75,7 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
                 'password' => bcrypt('password123'),
                 'isAdmin' => 0,
-
+                'hasKey' => 0,
                 'remember_token' => Str::random(10),
                 'created_at' => now(),
                 'updated_at' => now(),
