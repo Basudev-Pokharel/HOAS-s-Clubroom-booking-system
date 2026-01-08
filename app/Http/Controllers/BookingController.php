@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Booking;
+use App\Models\TimeSlot;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -67,10 +68,59 @@ class BookingController extends Controller
 
 
         if ($tab === 'bookings') {
-            $bookings = Booking::with(['user', 'timeslot'])->paginate(5);
+            $bookings = Booking::with(['user', 'timeslot'])->paginate(10);
         } else {
-            $users = User::paginate(2);
+            $search = $request->get('search', 'all');
+
+            $usersQuery = User::query();
+
+            if ($search === 'admin') {
+                $usersQuery->where('isAdmin', 1);
+            }
+
+            if ($search === 'member') {
+                $usersQuery->where('isAdmin', 0);
+            }
+
+            $users = $usersQuery
+                ->paginate(10)
+                ->withQueryString();
         }
         return view('admin.home', compact('tab', 'bookings', 'users', 'booking_stats', 'users_stats'));
+    }
+    public function bookFullDay(Request $request)
+    {
+        $request->validate([
+            'booking_date' => 'required|date',
+        ]);
+
+        $date = $request->booking_date;
+        $userId = auth()->id();
+
+        // Get all time slots
+        $timeSlots = TimeSlot::all();
+
+        foreach ($timeSlots as $slot) {
+
+            // Prevent double booking
+            $alreadyBooked = Booking::where('booking_date', $date)
+                ->where('time_slot_id', $slot->id)
+                ->exists();
+
+            if ($alreadyBooked) {
+                return back()->with('status', 'Some slots are already booked for this day.');
+            }
+        }
+
+        foreach ($timeSlots as $slot) {
+            Booking::create([
+                'user_id' => $userId,
+                'club_room_id' => 1,
+                'booking_date' => $date,
+                'time_slot_id' => $slot->id,
+            ]);
+        }
+
+        return back()->with('status', 'Full day booked successfully.');
     }
 }

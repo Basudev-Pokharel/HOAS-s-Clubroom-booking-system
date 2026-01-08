@@ -17,6 +17,8 @@ Route::post('/register', [UserController::class, 'register'])->name('user.regist
 Route::get('/', [HomeController::class, 'getHome'])->name('dashboard')->middleware(isAuthenticated::class);
 Route::patch('/update-password', [UserController::class, 'changePassword'])->name('user.update');
 Route::post('/book/{id}', [BookingController::class, 'book'])->name('slot.book');
+Route::post('/bookings/full-day', [BookingController::class, 'bookFullDay'])
+    ->name('booking.full-day');
 Route::post('/cancel/{id}', [BookingController::class, 'cancel'])->name('slot.cancel');
 
 // Routes for admins

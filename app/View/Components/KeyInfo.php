@@ -11,9 +11,11 @@ class KeyInfo extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
-    {
-        //
+    public $keyPeoples;
+    public function __construct(
+        $keyPeoples = [],
+    ) {
+        $this->keyPeoples = $keyPeoples;
     }
 
     /**
@@ -21,6 +23,7 @@ class KeyInfo extends Component
      */
     public function render(): View|Closure|string
     {
+        // return view('components.key-info', ['key_peoples' => $this->key_peoples]);
         return view('components.key-info');
     }
 }

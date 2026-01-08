@@ -28,6 +28,7 @@ class TimeSlotSeeder extends Seeder
             ['start_time' => '19:00', 'end_time' => '20:00'],
             ['start_time' => '20:00', 'end_time' => '21:00'],
             ['start_time' => '21:00', 'end_time' => '22:00'],
+            ['start_time' => '22:00', 'end_time' => '23:00'],
         ];
         TimeSlot::insert($time_slots);
     }

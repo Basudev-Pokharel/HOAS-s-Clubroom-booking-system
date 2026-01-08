@@ -66,11 +66,37 @@
             @endif
         @else
             @if (!empty($users))
+                <div class="my-2 flex flex-row gap-2 justify-center items-center">
+                    <form action="{{ route('admin.user.dashboard') }}" method="GET">
+                        @foreach (request()->except('search') as $key => $value)
+                            <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                        @endforeach
+                        <label for="searchBy">Sort By</label>
+                        <select name="search" id="searchBy"
+                            class="text-[#0b62db] bg-[#0b62db1e] outline-1 -outline-offset-1 outline-gray-300 placeholder:text-[#0b62db] focus:outline-2 focus:-outline-offset-2 focus:outline-[#254067] sm:text-sm/6">
+                            <option value="all" {{ request('search') === 'all' ? 'selected' : '' }}>All</option>
+                            <option value="admin" {{ request('search') === 'admin' ? 'selected' : '' }}>Admin members
+                            </option>
+                            <option value="member" {{ request('search') === 'member' ? 'selected' : '' }}>Normal
+                                members
+                            </option>
+                        </select>
+                        <input type="submit" value="Get"
+                            class="bg-[#0b62db] text-white  rounded-sm text-center hover:bg-[#6f9ee0] cursor-pointer px-1.5 py-1">
+                    </form>
+                    <a href="{{ route('admin.user.dashboard', ['tab' => 'members']) }}"
+                        class="bg-[#1059c0] text-white rounded-sm px-1.5 py-1">
+                        Reset
+                    </a>
+                </div>
+
+
+
                 <table class="w-full border-2 border-gray-500">
                     <thead class="w-full">
                         <tr class="flex gap-2 justify-between w-full border-b flex-row">
                             <th class="font-bold p-1  text-center text-lg">S.N.</th>
-                            <th class="font-bold p-1  text-center text-lg">Name</th>
+                            <th class="font-bold p-1  text-center text-lg">Email</th>
                             <th class="font-bold p-1  text-center text-lg">Action</th>
                         </tr>
                     </thead>

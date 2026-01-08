@@ -16,6 +16,7 @@
         }
 
         /* //FOr datepicker */
+        /* comment */
         input[type="date"] {
             position: absolute;
             width: 100%;
@@ -122,36 +123,39 @@
 
             </div>
         </div>
-        <div>
+        {{-- FOr bookign entire day --}}
+
+        {{-- Full day booking --}}
+        <div class="mt-3 w-full sm:max-w-[500px] border p-2 bg-gray-100">
+            <h3 class="font-bold text-lg text-[#0b62db]">Booking Shortcuts</h3>
+
+            <form method="POST" action="{{ route('booking.full-day') }}">
+                @csrf
+                <input type="hidden" name="booking_date" value="{{ $selectedDate }}">
+                <button type="submit" class="mt-2 w-full bg-[#0b62db] text-white py-2 rounded hover:bg-[#6f9ee0]">
+                    Book Entire Day
+                </button>
+            </form>
+        </div>
+        <div class="w-full sm:w-[600px]">
             @php
-                $slots_booked = \App\Models\Booking::where('user_id', auth()->id())
-                    ->whereMonth('booking_date', date_create($selectedDate)->format('m'))
-                    ->whereYear('booking_date', now()->year)
-                    ->count();
-                $slots_available = 10 - $slots_booked;
-
-                if (now()->format('Y-m-d') == $selectedDate) {
-                    $relevant_slots = \App\Models\TimeSlot::with([
-                        'bookings' => function ($query) use ($selectedDate) {
-                            $query->whereDate('booking_date', $selectedDate);
-                        },
-                    ])
-                        ->whereTime('start_time', '>=', now()->format('H:00'))
-                        ->get();
+                $dayOfWeek = date_create($selectedDate)->format('D');
+                $slotsQuery = \App\Models\TimeSlot::with([
+                    'bookings' => function ($query) use ($selectedDate) {
+                        $query->whereDate('booking_date', $selectedDate);
+                    },
+                ]);
+                if (in_array($dayOfWeek, ['Mon', 'Tue', 'Wed', 'Thu'])) {
+                    $slotsQuery->whereTime('start_time', '>=', '08:00')->whereTime('end_time', '<=', '22:00');
                 } else {
-                    $relevant_slots = \App\Models\TimeSlot::with([
-                        'bookings' => function ($query) use ($selectedDate) {
-                            $query->whereDate('booking_date', $selectedDate);
-                        },
-                    ])->get();
+                    $slotsQuery->whereTime('start_time', '>=', '08:00')->whereTime('end_time', '<=', '23:00');
                 }
-
+                if (now()->format('Y-m-d') == $selectedDate) {
+                    $slotsQuery->whereTime('start_time', '>=', now()->format('H:i'));
+                }
+                $relevant_slots = $slotsQuery->get();
             @endphp
-            <h4 class="w-full text-[#0b62db] bg-[#0b62db1e]  text-center font-semibold p-1">RESERVATIONS USED THIS
-                MONTH:
-                {{ $slots_booked }}
-                out
-                of 10
+            <h4 class="w-full text-[#0b62db] bg-[#0b62db1e]  text-center font-semibold p-1">AVAILABLE AND BOOKED SLOTS
             </h4>
             <div
                 class="w-full bg-gray-100  text-center text-gray-600 border-2 border-[#0b62db] flex justify-center items-center">

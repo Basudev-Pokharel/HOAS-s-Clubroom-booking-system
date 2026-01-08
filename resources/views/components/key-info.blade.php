@@ -1,6 +1,6 @@
       <div class="w-full flex justify-center items-center mt-2">
-          <button
-              class="flex gap-2 bg-[#1059c0] text-white p-2 rounded-sm text-center hover:bg-[#6f9ee0] cursor-pointer">
+          <button class="flex gap-2 bg-[#1059c0] text-white p-2 rounded-sm text-center hover:bg-[#6f9ee0] cursor-pointer"
+              onclick="KeyModalOpen()" id='keyModalOpenButton'>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                   stroke="currentColor" class="size-6">
                   <path stroke-linecap="round" stroke-linejoin="round"
@@ -11,25 +11,27 @@
       </div>
 
       {{-- // Modal begins here --}}
-      <div class="fixed inset-0 z-50 grid place-content-center bg-black/50 p-4 backdrop-blur-xl" role="dialog"
-          aria-modal="true" aria-labelledby="modalTitle">
-          <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+      <div class="hidden fixed inset-0 z-50 grid place-content-center bg-black/50 p-4 backdrop-blur-xl" role="dialog"
+          aria-modal="true" aria-labelledby="modalTitle" id='keyModal'>
+          <div class="w-full max-w-md rounded-lg bg-white p-6 shadow-lg" id='insideKeyModal'>
               <h2 id="modalTitle" class="text-xl font-bold text-gray-900 sm:text-2xl">Keys Information</h2>
-              <div class="mt-4">
+              <div class="mt-4 overflow-scroll max-h-[250px] sm:max-h-[300px]">
                   <p class="text-pretty text-gray-700">
                       Your room key doesn't work in the clubroom. You have to contact the local committee member who has
                       the keys. below are their details.
                   </p>
                   @php
-                      echo $key_peoples ?? 'not';
+                      //   var_export($keyPeoples);
                   @endphp
-                  @if (!empty($key_peoples))
-                      @foreach ($key_peoples as $people)
-                          <div class="">
-                              <h2>{{ $people->name }}</h2>
-                              <h3>{{ $people->whatsapp }}</h3>
-                          </div>
-                      @endforeach
+                  @if (!empty($keyPeoples))
+                      <div class="flex flex-col">
+                          @foreach ($keyPeoples as $people)
+                              <div class="flex gap-2">
+                                  <h2 class="font-bold">{{ $people->name }}</h2>--
+                                  <h3>{{ $people->contact_no }}</h3>
+                              </div>
+                          @endforeach
+                      </div>
                   @else
                       <h3 class="text-red-500 font-bold">No person found with key</h3>
                   @endif
@@ -37,7 +39,8 @@
 
               <footer class="mt-6 flex justify-end gap-2">
                   <button type="button"
-                      class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700">
+                      class="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 cursor-pointer"
+                      onclick="KeyCloseModal()">
                       Done
                   </button>
               </footer>
@@ -46,5 +49,24 @@
       {{-- //Modal ends here --}}
 
       <script>
-          //   let 
+          let KeyModal = document.getElementById('keyModal');
+          let insideKeyModal = document.getElementById('insideKeyModal')
+          let keyModalOpenButton = document.getElementById('keyModalOpenButton');
+
+          function KeyModalOpen() {
+              console.log('Triggered');
+              KeyModal.classList.remove('hidden');
+              //   KeyModal.style.display = 'grid';
+          }
+
+          function KeyCloseModal() {
+              KeyModal.classList.add('hidden');
+              //   AdminModal.classList.remove('hidden');
+
+          }
+          document.addEventListener('click', function(event) {
+              if (!insideKeyModal.contains(event.target) && !keyModalOpenButton.contains(event.target)) {
+                  KeyCloseModal();
+              }
+          });
       </script>
