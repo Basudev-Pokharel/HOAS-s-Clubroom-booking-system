@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class IsAddressed
+class UserAddressMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,12 @@ class IsAddressed
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
-    {;
-        if (!$request->session()->has('users')) {
-            return redirect()->route('validate.page')->with('status', 'Enter Your Address first to access');
+    {
+        if (Auth::check() || $request->session()->has('user_address')) {
+            return $next($request);
         }
-        return $next($request);
+
+        return redirect()->route('validate.page')
+            ->with('status', 'Login or enter address first');
     }
 }

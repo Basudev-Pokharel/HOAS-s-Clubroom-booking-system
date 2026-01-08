@@ -70,6 +70,11 @@
         }
     </style>
     {{-- <!-- Smile, breathe, and go slowly. - Thich Nhat Hanh --> --}}
+
+    @php
+        $userAddress = session('user_address');
+    @endphp
+
     <h4 class="text-xl font-bold  text-[#0b62db] mt-2.5 text-center">
         BOOKING A CLUB ROOM
     </h4>
@@ -124,19 +129,19 @@
             </div>
         </div>
         {{-- FOr bookign entire day --}}
-
         {{-- Full day booking --}}
-        <div class="mt-3 w-full sm:max-w-[500px] border p-2 bg-gray-100">
-            <h3 class="font-bold text-lg text-[#0b62db]">Booking Shortcuts</h3>
-
-            <form method="POST" action="{{ route('booking.full-day') }}">
-                @csrf
-                <input type="hidden" name="booking_date" value="{{ $selectedDate }}">
-                <button type="submit" class="mt-2 w-full bg-[#0b62db] text-white py-2 rounded hover:bg-[#6f9ee0]">
-                    Book Entire Day
-                </button>
-            </form>
-        </div>
+        @if (now() < date_create($selectedDate))
+            <div class="mt-3 w-full sm:max-w-[500px] border p-2 bg-gray-100">
+                <h3 class="font-bold text-lg text-[#0b62db]">Booking Shortcuts</h3>
+                <form method="POST" action="{{ route('booking.full-day') }}">
+                    @csrf
+                    <input type="hidden" name="booking_date" value="{{ $selectedDate }}">
+                    <button type="submit" class="mt-2 w-full bg-[#0b62db] text-white py-2 rounded hover:bg-[#6f9ee0]">
+                        Book Entire Day
+                    </button>
+                </form>
+            </div>
+        @endif
         <div class="w-full sm:w-[600px]">
             @php
                 $dayOfWeek = date_create($selectedDate)->format('D');
@@ -188,9 +193,16 @@
                                                 <div>
                                                     <input type="submit" value="Booked"
                                                         class="cursor-pointer text-green-600 " disabled />
-                                                    @if ($slot->bookings[0]->user_id == auth()->id())
-                                                        <input type="submit" value="Cancel"
-                                                            class="cursor-pointer text-red-500" />
+                                                    @if (Auth::check())
+                                                        @if ($slot->bookings[0]->user_id == auth()->id())
+                                                            <input type="submit" value="Cancel"
+                                                                class="cursor-pointer text-red-500" />
+                                                        @endif
+                                                    @else
+                                                        @if ($slot->bookings[0]->address_id == $userAddress->id)
+                                                            <input type="submit" value="Cancel"
+                                                                class="cursor-pointer text-red-500" />
+                                                        @endif
                                                     @endif
                                                 </div>
                                             </form>

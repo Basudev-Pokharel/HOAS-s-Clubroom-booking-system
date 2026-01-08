@@ -6,7 +6,7 @@
         <x-header>
         </x-header>
     </x-slot:header>
-    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-left justify-center sm:items-center">
+    <div class="flex flex-col flex-wrap flex-1  min-h-[70vh] items-left justify-center sm:items-center ">
         <h3 class="bg-[#254067] p-1 text-white font-semibold w-full text-lg">Enter Your address to Proceed</h3>
 
         @if (session('status'))
@@ -17,6 +17,17 @@
         <form action="{{ route('guest.address.register') }}"
             class="mt-3 bg-gray-10 flex flex-col gap-2 min-w-full sm:max-w-lg" method="POST">
             @csrf
+            <div class="flex flex-col gap-1">
+                <label for="name" class="text-[#254067] font-semibold">Your Name</label>
+                <input type="name" name="name" id="name"
+                    class="p-1.5 text-[#0b62db] bg-[#0b62db1e] outline-1 -outline-offset-1 outline-gray-300 placeholder:text-[#0b62db] focus:outline-2 focus:-outline-offset-2 focus:outline-[#254067] sm:text-sm/6"
+                    placeholder="e.g: John Doe">
+                @error('name')
+                    <p class="text-xs">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
             <div class="flex flex-row gap-1 
              items-center">
                 <label for="building_unit" class="text-[#254067] font-semibold ">Building Unit</label>
@@ -54,8 +65,12 @@
                     </p>
                 @enderror
             </div>
-            <input type="submit" value="Proceed"
-                class="p-2 px-3 text-[#0b62db] bg-gray-200 w-fit font-semibold cursor-pointer">
+            <div class="flex gap-2">
+                <input type="submit" value="Proceed"
+                    class="p-2 px-3 text-[#0b62db] bg-gray-200 w-fit font-semibold cursor-pointer">
+                <a class="cursor-pointer p-2 bg-[#254067] text-white rounded-sm w-fit text-left sm:text-center mt-2"
+                    href="{{ route('login.page') }}">Login Instead</a>
+            </div>
         </form>
     </div>
 </x-layout>

@@ -20,10 +20,7 @@
                       Your room key doesn't work in the clubroom. You have to contact the local committee member who has
                       the keys. below are their details.
                   </p>
-                  @php
-                      //   var_export($keyPeoples);
-                  @endphp
-                  @if (!empty($keyPeoples))
+                  @if (count($keyPeoples) > 0)
                       <div class="flex flex-col">
                           @foreach ($keyPeoples as $people)
                               <div class="flex gap-2">
@@ -54,15 +51,12 @@
           let keyModalOpenButton = document.getElementById('keyModalOpenButton');
 
           function KeyModalOpen() {
-              console.log('Triggered');
               KeyModal.classList.remove('hidden');
-              //   KeyModal.style.display = 'grid';
+
           }
 
           function KeyCloseModal() {
               KeyModal.classList.add('hidden');
-              //   AdminModal.classList.remove('hidden');
-
           }
           document.addEventListener('click', function(event) {
               if (!insideKeyModal.contains(event.target) && !keyModalOpenButton.contains(event.target)) {

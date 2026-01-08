@@ -37,12 +37,19 @@ class UserController extends Controller
             'name' => 'required|string',
             'email' => 'required|email',
             'password' => 'required|confirmed',
-            'address' => 'required'
+            'address' => 'required',
+            'contact_no' => 'nullable'
         ]);
-        if (User::where('email', $details['email'])) {
+        if (User::where('email', $details['email'])->exists()) {
             return back()->with('account', 'Account already Exists please login...');
         }
-        $insert = User::insert($details);
+        $insert = User::insert([
+            'name' => $details['name'],
+            'email' => $details['email'],
+            'password' => Hash::make($details['password']),
+            'address' => $details['address'],
+            'contact_no' => $details['contact_no'],
+        ]);
         if ($insert) {
             return redirect('/login')->with('status', 'Register Successfull, Now Login');
         } else {

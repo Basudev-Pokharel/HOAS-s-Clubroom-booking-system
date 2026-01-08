@@ -56,6 +56,17 @@
                 @enderror
             </div>
             <div class="flex flex-col gap-1">
+                <label for="contact_no" class="text-[#0b62db] font-semibold ">contact[Optional]</label>
+                <input type="text" name="contact_no" id="contact_no"
+                    class="p-1.5 text-[#0b62db] bg-[#0b62db1e] outline-1 -outline-offset-1 outline-gray-300 placeholder:text-[#0b62db] focus:outline-2 focus:-outline-offset-2 focus:outline-[#254067] sm:text-sm/6""
+                    value="{{ old('contact_no') }}">
+                @error('contact_no')
+                    <p class="text-xs">
+                        {{ $message }}
+                    </p>
+                @enderror
+            </div>
+            <div class="flex flex-col gap-1">
                 <label for="password" class="text-[#0b62db] font-semibold">PASSWORD</label>
                 <input type="password" name="password" id="password"
                     class="p-1.5 text-[#0b62db] bg-[#0b62db1e] outline-1 -outline-offset-1 outline-gray-300 placeholder:text-[#0b62db] focus:outline-2 focus:-outline-offset-2 focus:outline-[#254067] sm:text-sm/6"

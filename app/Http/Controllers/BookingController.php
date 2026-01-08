@@ -23,7 +23,7 @@ class BookingController extends Controller
             'booking_date' => date_create($request->booking_date)->format('Y-m-d')
         ]);
         if ($is_booked) {
-            return redirect('/')->with('status', 'Booking successfull');
+            return back()->with('status', 'Booking successfull');
         } else {
             return back()->with('status', 'Booking Failed, Contact Developers');
         }
@@ -37,7 +37,7 @@ class BookingController extends Controller
         $date = date_create($request->booking_date)->format('Y-m-d');
         $is_delete = Booking::where('user_id', auth()->id())->where('club_room_id', 1)->where('time_slot_id', $timeslot)->where('booking_date', $date)->delete();
         if ($is_delete) {
-            return redirect('/')->with('status', 'Deletion successfull');
+            return back()->with('status', 'Deletion successfull');
         } else {
             return back()->with('status', 'Delete Failed, Contact Developers');
         }

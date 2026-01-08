@@ -15,7 +15,7 @@
         </div>
     @endif
     @php
-        echo $userAddress;
+        $booked_slots = collect();
     @endphp
 
     {{-- Div for padding so that everything don't flow out --}}
@@ -34,7 +34,6 @@
             system for
             the clubrooms in this
             building so it is open for everyone</p>
-        {{-- <x-key-info :key_peoples="$key_peoples"></x-key-info> --}}
         <x-key-info :key-peoples="$key_peoples"></x-key-info>
 
         <div class="border w-full sm:max-w-[500px] mb-4 mt-3">
@@ -60,24 +59,33 @@
                 </tbody>
             </table>
         </div>
-
-
-
-
         {{-- For booking summary part --}}
         <div class="w-full">
             <h3 class="bg-[#254067] p-1 text-white font-semibold w-full text-lg">Booking Summary</h3>
             {{-- //Loops for the booked shows goes here --}}
-            @php
-                $booked_slots = \App\Models\Booking::with('timeslot')
-                    ->where('user_id', auth()->id())
-                    ->where('address_id', session('user_address')->id)
-                    ->whereDate('booking_date', '>=', now())
-                    ->orderBy('booking_date', 'asc')
-                    ->orderBy('time_slot_id')
-                    ->get()
-                    ->groupBy('booking_date');
-            @endphp
+            @if (Auth::check())
+                @php
+                    $booked_slots = \App\Models\Booking::with('timeslot')
+                        ->where('user_id', auth()->id())
+                        ->whereDate('booking_date', '>=', now())
+                        ->orderBy('booking_date', 'asc')
+                        ->orderBy('time_slot_id')
+                        ->get()
+                        ->groupBy('booking_date');
+                @endphp
+            @else
+                @if (session()->has('user_address'))
+                    @php
+                        $booked_slots = \App\Models\Booking::with('timeslot')
+                            ->where('address_id', session('user_address')->id)
+                            ->whereDate('booking_date', '>=', now())
+                            ->orderBy('booking_date', 'asc')
+                            ->orderBy('time_slot_id')
+                            ->get()
+                            ->groupBy('booking_date');
+                    @endphp
+                @endif
+            @endif
             @if (count($booked_slots) > 0)
                 @foreach ($booked_slots as $date => $dayBookings)
                     @php
@@ -148,7 +156,7 @@
                         </div>
                     </div>
                 @endauth
-                @if (Auth()->check() == null && $userAddress)
+                @if ($userAddress)
                     <p>Login to see your bookings <a class="text-blue-600 underline"
                             href="{{ route('user.login') }}">here</a> </p>
                 @endif
@@ -157,15 +165,11 @@
         </div>
         <x-club-room-book></x-club-room-book>
     </div>
-    @if ($userAddress)
-        <script>
-            // Get the userAddress from PHP
-            const userAddress = @json($userAddress);
-
-            // Save to localStorage
-            localStorage.setItem('guestUser', JSON.stringify(userAddress));
-
-            console.log('Guest user saved:', userAddress);
-        </script>
-    @endif
+    <div>
+        @if (!Auth::check())
+            <a href="{{ route('login.page') }}" class="text-center underline w-full inline-block text-blue-700">Login
+                with
+                User</a>
+        @endif
+    </div>
 </x-layout>
