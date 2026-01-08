@@ -14,9 +14,11 @@ class BookingController extends Controller
         $request->validate([
             'booking_date' => 'required',
         ]);
+        // return session('user_address')->id;
         $is_booked = Booking::create([
-            'user_id' => auth()->id(),
+            'user_id' => auth()->id() ?? null,
             'club_room_id' => 1,
+            'address_id' => session('user_address')->id ?? null,
             'time_slot_id' => $timeslot,
             'booking_date' => date_create($request->booking_date)->format('Y-m-d')
         ]);

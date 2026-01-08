@@ -14,7 +14,9 @@
             {{ session('status') }}
         </div>
     @endif
-
+    @php
+        echo $userAddress;
+    @endphp
 
     {{-- Div for padding so that everything don't flow out --}}
     <div class="p-1 flex flex-col flex-wrap gap-1 justify-center items-center">
@@ -32,9 +34,6 @@
             system for
             the clubrooms in this
             building so it is open for everyone</p>
-        @php
-            // echo $key_peoples;
-        @endphp
         {{-- <x-key-info :key_peoples="$key_peoples"></x-key-info> --}}
         <x-key-info :key-peoples="$key_peoples"></x-key-info>
 
@@ -72,6 +71,7 @@
             @php
                 $booked_slots = \App\Models\Booking::with('timeslot')
                     ->where('user_id', auth()->id())
+                    ->where('address_id', session('user_address')->id)
                     ->whereDate('booking_date', '>=', now())
                     ->orderBy('booking_date', 'asc')
                     ->orderBy('time_slot_id')
@@ -134,25 +134,38 @@
                     </div>
                 @endforeach
             @else
-                <div class="flex justify-start items-center flex-row flex-wrap">
-                    {{-- Parent container --}}
-                    <div class="flex justify-baseline items-center gap-1 flex-wrap  w-full bg-gray-200' p-1">
-                        {{-- Child container --}}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6" style="color:#5e66f5">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
-                        <p>No Bookings found</p>
+                @auth
+                    <div class="flex justify-start items-center flex-row flex-wrap">
+                        {{-- Parent container --}}
+                        <div class="flex justify-baseline items-center gap-1 flex-wrap  w-full bg-gray-200' p-1">
+                            {{-- Child container --}}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6" style="color:#5e66f5">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                            </svg>
+                            <p>No Bookings found</p>
+                        </div>
                     </div>
-                </div>
+                @endauth
+                @if (Auth()->check() == null && $userAddress)
+                    <p>Login to see your bookings <a class="text-blue-600 underline"
+                            href="{{ route('user.login') }}">here</a> </p>
+                @endif
 
             @endif
         </div>
-        {{-- For list of Admins or who have Key --}}
-        <div>
-
-        </div>
         <x-club-room-book></x-club-room-book>
     </div>
+    @if ($userAddress)
+        <script>
+            // Get the userAddress from PHP
+            const userAddress = @json($userAddress);
+
+            // Save to localStorage
+            localStorage.setItem('guestUser', JSON.stringify(userAddress));
+
+            console.log('Guest user saved:', userAddress);
+        </script>
+    @endif
 </x-layout>

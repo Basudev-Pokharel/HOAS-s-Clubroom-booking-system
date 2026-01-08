@@ -3,8 +3,10 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TimeSlotController;
+use App\Http\Controllers\UserAddressIdController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\IsAddressed;
 use App\Http\Middleware\isAuthenticated;
 use App\Http\Middleware\isGuest;
 
@@ -14,7 +16,14 @@ Route::post('/logout', [UserController::class, 'logout'])->name('user.logout');
 Route::view('/register', 'register')->name('register.page')->middleware(isGuest::class);
 Route::post('/register', [UserController::class, 'register'])->name('user.register');
 //Login Route for the user
-Route::get('/', [HomeController::class, 'getHome'])->name('dashboard')->middleware(isAuthenticated::class);
+Route::get('/', [HomeController::class, 'getHome'])->name('dashboard')->middleware(IsAddressed::class);
+
+//Validate with the user address then
+Route::view('/validate', 'guest.login')->name('validate.page')->middleware(IsAddressed::class);
+Route::post('/validate_register', [UserAddressIdController::class, 'registerOrLogin'])->name('guest.address.register');
+
+
+
 Route::patch('/update-password', [UserController::class, 'changePassword'])->name('user.update');
 Route::post('/book/{id}', [BookingController::class, 'book'])->name('slot.book');
 Route::post('/bookings/full-day', [BookingController::class, 'bookFullDay'])
