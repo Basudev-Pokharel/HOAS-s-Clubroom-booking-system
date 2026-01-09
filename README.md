@@ -19,3 +19,11 @@ This is the booking system for the people of Aisakkaankatu building. In HOAS's b
   - ORM(Object Relational Mapping)
 - CSS (Tailwind CSS)
 - JS (Javascript)
+
+## Test Credentials
+If you are curious to test please use this credentials:
+```js
+# Ordinary Member                 |    # Admin Member
+email: james.wilson@example.com   |     email: maria.garcia@example.com 
+password: password123             |     password: password123 
+```
