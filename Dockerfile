@@ -38,10 +38,16 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN php artisan config:clear \
     && php artisan cache:clear \
     && php artisan route:clear \
-    && php artisan view:clear \
-    && php artisan migrate --force --seed
+    && php artisan view:clear 
+    # && php artisan migrate --force --seed
 
-CMD envsubst '$PORT' \
-    < /etc/nginx/templates/default.conf.template \
-    > /etc/nginx/sites-available/default \
-    && /usr/bin/supervisord -n
+# CMD envsubst '$PORT' \
+#     < /etc/nginx/templates/default.conf.template \
+#     > /etc/nginx/sites-available/default \
+#     && /usr/bin/supervisord -n
+
+
+CMD php artisan migrate --force --seed && \
+    envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/sites-available/default && \
+    /usr/bin/supervisord -n
+
