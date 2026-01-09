@@ -16,18 +16,20 @@ class BookingSeeder extends Seeder
         $bookings = [
             // December 2025 — user 1
             [
-                'user_id' => null,
-                'address_id' => 1,
+                'user_id' => 1,
+                'address_id' => null,
                 'club_room_id' => 1,
                 'time_slot_id' => 3,
+                'guest_token' => null,
                 'booking_date' => '2026-01-10',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'user_id' => 1,
+                'user_id' => 2,
                 'club_room_id' => 1,
-                'address_id' => 2,
+                'address_id' => null,
+                'guest_token' => null,
                 'time_slot_id' => 4,
                 'booking_date' => '2026-01-15',
                 'created_at' => now(),

@@ -35,6 +35,11 @@ COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.templa
 
 # Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN php artisan config:clear \
+    && php artisan cache:clear \
+    && php artisan route:clear \
+    && php artisan view:clear \
+    && php artisan migrate --force --seed
 
 CMD envsubst '$PORT' \
     < /etc/nginx/templates/default.conf.template \

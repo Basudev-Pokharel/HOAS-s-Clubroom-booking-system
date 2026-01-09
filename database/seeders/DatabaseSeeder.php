@@ -29,9 +29,9 @@ class DatabaseSeeder extends Seeder
             "updated_at" => now(),
         ]);
         $this->call([
-            // UserSeeder::class,
+            UserSeeder::class,
             TimeSlotSeeder::class,
-            // BookingSeeder::class
+            BookingSeeder::class
         ]);
     }
 }
