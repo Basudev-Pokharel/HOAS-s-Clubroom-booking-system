@@ -9,6 +9,7 @@ This is the booking system for the people of Aisakkaankatu building. In HOAS's b
 ## Features
 - Admins can see the people who booked the slots of the `Clubroom` and cancel their bookings as well.
 - People can login and logout
+- Completely Mobile responsive. In fact this is mobile first design and not even well optimized for the laptops or screen > mobile screens.
 - People can book slots without login and logging out but with the their address data & Name.
 - See available vacant slots
 - People can find out the members who has key of the clubroom 
