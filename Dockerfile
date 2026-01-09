@@ -4,7 +4,7 @@ FROM php:8.2-fpm AS build
 WORKDIR /var/www/html
 
 RUN apt-get update && apt-get install -y \
-    git unzip curl zip \
+    git unzip curl zip nodejs npm\
     libzip-dev libonig-dev libxml2-dev \
     libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql mbstring zip exif pcntl bcmath xml
@@ -12,7 +12,9 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader \
+    && npm install \
+    && npm run build
 
 # ---------- Runtime stage ----------
 FROM php:8.2-fpm
