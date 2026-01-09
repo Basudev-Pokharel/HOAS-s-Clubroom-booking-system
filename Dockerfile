@@ -45,5 +45,6 @@ CMD envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/s
     php artisan cache:clear && \
     php artisan route:clear && \
     php artisan view:clear && \
-     php artisan migrate:fresh --force --seed && \
+    #  php artisan migrate:fresh --force --seed && \
+     php artisan migrate --force && \
     /usr/bin/supervisord -n
