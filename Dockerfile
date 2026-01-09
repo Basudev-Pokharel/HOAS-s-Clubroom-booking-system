@@ -21,7 +21,9 @@ WORKDIR /var/www/html
 ENV PORT=10000
 
 RUN apt-get update && apt-get install -y \
-    nginx supervisor curl gettext-base
+    nginx supervisor curl gettext-base libpq-dev \
+    && docker-php-ext-install pdo_pgsql
+
 
 # Copy built app
 COPY --from=build /var/www/html /var/www/html
