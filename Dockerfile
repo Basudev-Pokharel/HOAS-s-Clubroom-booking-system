@@ -9,7 +9,6 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql mbstring zip exif pcntl bcmath xml
 
-
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 COPY . .
 
@@ -19,12 +18,12 @@ RUN composer install --no-dev --optimize-autoloader
 FROM php:8.2-fpm
 
 WORKDIR /var/www/html
-
 ENV PORT=10000
 
 RUN apt-get update && apt-get install -y \
     nginx supervisor curl gettext-base
 
+# Copy built app
 COPY --from=build /var/www/html /var/www/html
 
 RUN chown -R www-data:www-data storage bootstrap/cache \
@@ -35,19 +34,12 @@ COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.templa
 
 # Supervisor
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN php artisan config:clear \
-    && php artisan cache:clear \
-    && php artisan route:clear \
-    && php artisan view:clear 
-    # && php artisan migrate --force --seed
 
-# CMD envsubst '$PORT' \
-#     < /etc/nginx/templates/default.conf.template \
-#     > /etc/nginx/sites-available/default \
-#     && /usr/bin/supervisord -n
-
-
-CMD php artisan migrate --force --seed && \
-    envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/sites-available/default && \
+# Start container: generate Nginx config, run migrations & seed, then supervisord
+CMD envsubst '$PORT' < /etc/nginx/templates/default.conf.template > /etc/nginx/sites-available/default && \
+    php artisan config:clear && \
+    php artisan cache:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan migrate --force --seed && \
     /usr/bin/supervisord -n
-
