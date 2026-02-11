@@ -102,8 +102,8 @@
                 $day_today = $date_today->format('l');
                 $hour_now = $date_today->format('H');
                 $printable_date_today = $date_today->format('Y-m-d');
-                $date_after_2_months = date_add($date_today, date_interval_create_from_date_string('2 months'));
-                $printable_date_after_2_month = date_format($date_after_2_months, 'Y-m-d');
+                $date_after_2_months = $date_today->add(DateInterval::createFromDateString('2 months'));
+                $printable_date_after_2_month = $date_after_2_months->format('Y-m-d');
 
                 //Get date from Url| selected date
                 $datee_url = date_create(request('date'));
@@ -188,8 +188,7 @@
                                                 class="bookingTimeForm" data-slot-id="{{ $slot->id }}"
                                                 method="POST">
                                                 @csrf
-                                                <input type="hidden" name='booking_date'
-                                                    value="{{ $slot->start_time }}">
+                                                <input type="hidden" name='booking_date' value="{{ $selectedDate }}">
                                                 <div>
                                                     <input type="submit" value="Booked"
                                                         class="cursor-pointer text-green-600 " disabled />
@@ -199,7 +198,7 @@
                                                                 class="cursor-pointer text-red-500" />
                                                         @endif
                                                     @else
-                                                        @if ($slot->bookings[0]->address_id == $userAddress->id)
+                                                        @if ($slot->bookings[0]->address_idFullDateCurrentCalander == $userAddress->id)
                                                             <input type="submit" value="Cancel"
                                                                 class="cursor-pointer text-red-500" />
                                                         @endif
@@ -220,7 +219,7 @@
     </div>
     <script>
         let d = new Date({{ Illuminate\Support\Js::from($selectedDate) }});
-        var FullDateCurrentCalander = d.getFullYear() + '-' + d.getMonth() + 1 + '-' + d.getDate();
+        var FullDateCurrentCalander = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
         let date_label = document.getElementById('date_label');
         let date = document.getElementById('date');
         date.addEventListener('change', (e) => {
@@ -228,10 +227,7 @@
             // console.log(day);
             const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
             let dateFrontend = e.target.value.split('-');
-            let temp = dateFrontend[2];
-            dateFrontend[2] = dateFrontend[0];
-            dateFrontend[0] = temp;
-            let dateFormattedFinnishStyle = dateFrontend.join('.');
+            let dateFormattedFinnishStyle = dateFrontend[2] + '.' + dateFrontend[1] + '.' + dateFrontend[0];
             // If user did clear then it shows today's date
             let nowDateFails = new Date();
             let fallbackDate = nowDateFails.getDate() + '.' +
