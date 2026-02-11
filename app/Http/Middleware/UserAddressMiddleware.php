@@ -20,7 +20,7 @@ class UserAddressMiddleware
             return $next($request);
         }
 
-        return redirect()->route('validate.page')
-            ->with('status', 'Login or enter address first');
+        return redirect()->route('login.page')
+            ->with('status', 'Login to enter inside');
     }
 }

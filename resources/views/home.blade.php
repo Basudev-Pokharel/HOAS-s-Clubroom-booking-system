@@ -165,11 +165,13 @@
         </div>
         <x-club-room-book></x-club-room-book>
     </div>
-    <div>
+
+    {{-- // For logging with User instead of address way --}}
+    {{-- <div>
         @if (!Auth::check())
             <a href="{{ route('login.page') }}" class="text-center underline w-full inline-block text-blue-700">Login
                 with
                 User</a>
         @endif
-    </div>
+    </div> --}}
 </x-layout>

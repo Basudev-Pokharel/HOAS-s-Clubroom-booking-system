@@ -12,6 +12,5 @@ class HomeController extends Controller
         $key_peoples = User::where('hasKey', true)->get();
         $userAddress = session('user_address');
         return view('home', compact('key_peoples', 'userAddress'));
-        // return view('home');
     }
 }

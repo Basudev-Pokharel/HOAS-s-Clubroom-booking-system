@@ -45,8 +45,8 @@
             <div class="flex gap-2">
                 <input type="submit" value="LOGIN"
                     class="p-2 px-3 text-[#0b62db] bg-gray-200 w-fit font-semibold cursor-pointer">
-                <a class="cursor-pointer p-1 bg-[#254067] text-white rounded-sm w-fit text-left sm:text-center mt-2"
-                    href="{{ route('validate.page') }}">Address Way</a>
+                {{-- <a class="cursor-pointer p-1 bg-[#254067] text-white rounded-sm w-fit text-left sm:text-center mt-2"
+                    href="{{ route('validate.page') }}">Address Way</a> --}}
             </div>
         </form>
         <div class="w-full mt-2 ">
